@@ -1,10 +1,23 @@
 package com.gildedrose;
 
-public class TexttestFixture {
-    public static void main(String[] args) {
-        System.out.println("OMGHAI!");
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
-        Item[] items = new Item[] {
+import static org.junit.Assert.assertEquals;
+
+public class TexttestFixture {
+    private static List<String> msgs;
+
+    public static void main(String[] args) {
+        msgs = new ArrayList<>();
+        log("OMGHAI!");
+
+        Item[] items = new Item[]{
                 new Item("+5 Dexterity Vest", 10, 20), //
                 new Item("Aged Brie", 2, 0), //
                 new Item("Elixir of the Mongoose", 5, 7), //
@@ -14,24 +27,44 @@ public class TexttestFixture {
                 new Item("Backstage passes to a TAFKAL80ETC concert", 10, 49),
                 new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
                 // this conjured item does not work properly yet
-                new Item("Conjured Mana Cake", 3, 6) };
+                new Item("Conjured Mana Cake", 3, 6)};
 
         GildedRose app = new GildedRose(items);
 
-        int days = 2;
+        int days = 10;
         if (args.length > 0) {
             days = Integer.parseInt(args[0]) + 1;
         }
 
         for (int i = 0; i < days; i++) {
-            System.out.println("-------- day " + i + " --------");
-            System.out.println("name, sellIn, quality");
+            log("-------- day " + i + " --------");
+            log("name, sellIn, quality");
             for (Item item : items) {
-                System.out.println(item);
+                log(item.toString());
             }
-            System.out.println();
+            log("");
             app.updateQuality();
         }
+
+        assertWithGoldenMaster();
+    }
+
+    private static void assertWithGoldenMaster() {
+        Path gm = Paths.get("src/test/goldenmaster.txt");
+        try {
+            List<String> lines = Files.readAllLines(gm);
+            assertEquals(msgs.size(), lines.size());
+            IntStream.range(0, msgs.size()).forEach(i -> {
+                assertEquals(msgs.get(i), lines.get(i));
+
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void log(String msg) {
+        msgs.add(msg);
     }
 
 }
