@@ -1,5 +1,7 @@
 package com.gildedrose;
 
+import static com.gildedrose.ProductType.SULFURAS;
+
 public class Product {
     private final String name;
     private final int sellIn;
@@ -16,5 +18,9 @@ public class Product {
 
     public boolean is(ProductType type) {
         return this.type.equals(type);
+    }
+
+    public boolean qualityCanChange() {
+        return is(SULFURAS);
     }
 }

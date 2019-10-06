@@ -12,13 +12,14 @@ class GildedRose {
     }
 
     public void updateQuality() {
+
+
         for (Item item : items) {
             Product product = ProductFactory.of(item);
 
-            if (!product.is(AGED_BRIE)
-                    && !nameIs(product, BACKSTAGE_PASSES)) {
+            if (!product.is(AGED_BRIE) && !product.is(BACKSTAGE_PASSES)) {
                 if (item.quality > 0) {
-                    if (!nameIs(product, SULFURAS)) {
+                    if (!product.qualityCanChange()) {
                         item.quality = item.quality - 1;
                     }
                 }
@@ -26,7 +27,7 @@ class GildedRose {
                 if (item.quality < MAX_QUALITY) {
                     item.quality = item.quality + 1;
 
-                    if (nameIs(product, BACKSTAGE_PASSES)) {
+                    if (product.is(BACKSTAGE_PASSES)) {
                         if (item.sellIn < 11) {
                             increaseQualityFrom(item);
                         }
@@ -38,15 +39,15 @@ class GildedRose {
                 }
             }
 
-            if (!nameIs(product, SULFURAS)) {
+            if (!product.is(SULFURAS)) {
                 item.sellIn = item.sellIn - 1;
             }
 
             if (item.sellIn < 0) {
-                if (!nameIs(product, AGED_BRIE)) {
-                    if (!nameIs(product, BACKSTAGE_PASSES)) {
+                if (!product.is(AGED_BRIE)) {
+                    if (!product.is(BACKSTAGE_PASSES)) {
                         if (item.quality > 0) {
-                            if (!nameIs(product, SULFURAS)) {
+                            if (!product.is(SULFURAS)) {
                                 item.quality = item.quality - 1;
                             }
                         }
@@ -58,10 +59,6 @@ class GildedRose {
                 }
             }
         }
-    }
-
-    private boolean nameIs(Product item, ProductType backstagePasses) {
-        return item.is(backstagePasses);
     }
 
     private void increaseQualityFrom(Item item) {
