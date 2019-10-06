@@ -1,16 +1,21 @@
 package com.gildedrose;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
+import java.util.stream.IntStream;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class GildedRoseTest {
+
+    private static final int MAX_QUALITY = 50;
 
     @Test
     public void the_name_doesnt_change() {
         Item item = new Item("foo", 0, 0);
         updateQualityFrom(item);
-        assertEquals("the name doesn't change by update","foo",item.name);
+        assertEquals("the name doesn't change by update", "foo", item.name);
     }
 
     private GildedRose createApp(Item item) {
@@ -24,13 +29,14 @@ public class GildedRoseTest {
         GildedRose app = createApp(item);
         assertEquals(0, app.items[0].quality);
         app.updateQuality();
-        assertEquals("the quality can't be negative",0,item.quality);
+        assertEquals("the quality can't be negative", 0, item.quality);
     }
+
     @Test
     public void sellin_days_can_be_negative() {
         Item item = new Item("foo", 0, 0);
         updateQualityFrom(item);
-        assertEquals("sellin days can be negative",-1, item.sellIn);
+        assertEquals("sellin days can be negative", -1, item.sellIn);
     }
 
     private void updateQualityFrom(Item item) {
@@ -40,25 +46,73 @@ public class GildedRoseTest {
 
 
     @Test
-    public void once_sell_date_is_past_quality_degrades_twice_as_fast(){
+    public void once_sell_date_is_past_quality_degrades_twice_as_fast() {
         Item pastSelldate = createItemPastSellDate();
         int expectedQuality = pastSelldate.quality - 2;
         updateQualityFrom(pastSelldate);
-        assertEquals("once sell date is past quality degrades twice as fast",pastSelldate.quality,expectedQuality);
+        assertEquals("once sell date is past quality degrades twice as fast", pastSelldate.quality, expectedQuality);
     }
+
     @Test
-    public void if_sell_date_is_not_past_quality_degrades_by_one(){
+    public void if_sell_date_is_not_past_quality_degrades_by_one() {
         Item pastSelldate = createItem();
         int expectedQuality = pastSelldate.quality - 1;
         updateQualityFrom(pastSelldate);
-        assertEquals("if sell date is not past, quality degrades by one",pastSelldate.quality,expectedQuality);
+        assertEquals("if sell date is not past, quality degrades by one", pastSelldate.quality, expectedQuality);
     }
 
+    @Test
+    public void brie_quality_gets_better_by_aging() {
+        Item brie = createBrie();
+        int before = brie.quality;
+        updateQualityFrom(brie);
+        assertTrue(brie.quality > before);
+    }
+
+    @Test
+    public void quality_is_never_above_max() {
+        Item brie = createBrie();
+        brie.quality = MAX_QUALITY;
+        int before = brie.quality;
+        IntStream.range(0, 10).forEach(i -> updateQualityFrom(brie));
+        assertEquals("Quality doesn't get above 50", before, brie.quality);
+    }
+
+    @Test
+    public void sulfuras_never_changes_quality() {
+        // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
+        Item sulfuras = sulfuras();
+        int before = sulfuras.quality;
+        IntStream.range(0, 10).forEach(i -> updateQualityFrom(sulfuras));
+        assertEquals("Quality doesn't change", before, sulfuras.quality);
+    }
+
+    @Test
+    public void backstage_passes(){
+        //- "Backstage passes", like aged brie, increases in Quality as its SellIn value approaches;
+        //Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days or less but
+        //Quality drops to 0 after the concert
+
+    }
+
+
+    private Item sulfuras() {
+        return new Item("Sulfuras, Hand of Ragnaros",10,10);
+    }
+
+
+    private Item createBrie() {
+        Item brie = createItem();
+        brie.name = "Aged Brie";
+        return brie;
+    }
+
+
     private Item createItem() {
-        return new Item("tst",1,10);
+        return new Item("tst", 1, 10);
     }
 
     private Item createItemPastSellDate() {
-        return new Item("tst",0,10);
+        return new Item("tst", 0, 10);
     }
 }
