@@ -80,7 +80,6 @@ public class GildedRoseTest {
 
     @Test
     public void sulfuras_never_changes_quality() {
-        // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
         Item sulfuras = sulfuras();
         int before = sulfuras.quality;
         IntStream.range(0, 10).forEach(i -> updateQualityFrom(sulfuras));
@@ -88,11 +87,34 @@ public class GildedRoseTest {
     }
 
     @Test
-    public void backstage_passes(){
-        //- "Backstage passes", like aged brie, increases in Quality as its SellIn value approaches;
-        //Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days or less but
-        //Quality drops to 0 after the concert
+    public void backstage_passes_increase_quality_by_2_between_10_and_5_days(){
+        Item backstage = backstagePass(10);
+        while (backstage.sellIn>5) {
+            int before = backstage.quality;
+            updateQualityFrom(backstage);
+            assertEquals(before + 2, backstage.quality);
+        }
+    }
+    @Test
+    public void backstage_passes_increase_quality_by_3_between_5_and_0_days(){
+        Item backstage = backstagePass(5);
+        while (backstage.sellIn>0) {
+            int before = backstage.quality;
+            updateQualityFrom(backstage);
+            assertEquals(before + 3, backstage.quality);
+        }
+    }
+    @Test
+    public void backstage_passes_quality_drops_to_0_when_sellinday_reaches_0(){
+        Item backstage = backstagePass(0);
+        assertTrue(backstage.quality>0);
+        updateQualityFrom(backstage);
+        assertEquals("After sellindays quality drops to 0",backstage.quality,0);
+    }
 
+
+    private Item backstagePass(int sellInDays) {
+        return new Item("Backstage passes to a TAFKAL80ETC concert",sellInDays,10);
     }
 
 
