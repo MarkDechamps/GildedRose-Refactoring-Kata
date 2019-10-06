@@ -1,10 +1,10 @@
 package com.gildedrose;
 
+import static com.gildedrose.ProductType.*;
+
 class GildedRose {
-    public static final String AGED_BRIE = "Aged Brie";
-    public static final String BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert";
-    public static final String SULFURAS = "Sulfuras, Hand of Ragnaros";
-    public static final int MAX_QUALITY = 50;
+
+    private static final int MAX_QUALITY = 50;
     Item[] items;
 
     public GildedRose(Item[] items) {
@@ -12,12 +12,13 @@ class GildedRose {
     }
 
     public void updateQuality() {
-        for (int i = 0; i < items.length; i++) {
-            Item item = items[i];
-            if (!item.name.equals(AGED_BRIE)
-                    && !item.name.equals(BACKSTAGE_PASSES)) {
+        for (Item item : items) {
+            Product product = ProductFactory.of(item);
+
+            if (!product.is(AGED_BRIE)
+                    && !nameIs(product, BACKSTAGE_PASSES)) {
                 if (item.quality > 0) {
-                    if (!item.name.equals(SULFURAS)) {
+                    if (!nameIs(product, SULFURAS)) {
                         item.quality = item.quality - 1;
                     }
                 }
@@ -25,7 +26,7 @@ class GildedRose {
                 if (item.quality < MAX_QUALITY) {
                     item.quality = item.quality + 1;
 
-                    if (item.name.equals(BACKSTAGE_PASSES)) {
+                    if (nameIs(product, BACKSTAGE_PASSES)) {
                         if (item.sellIn < 11) {
                             increaseQualityFrom(item);
                         }
@@ -37,15 +38,15 @@ class GildedRose {
                 }
             }
 
-            if (!item.name.equals(SULFURAS)) {
+            if (!nameIs(product, SULFURAS)) {
                 item.sellIn = item.sellIn - 1;
             }
 
             if (item.sellIn < 0) {
-                if (!item.name.equals(AGED_BRIE)) {
-                    if (!item.name.equals(BACKSTAGE_PASSES)) {
+                if (!nameIs(product, AGED_BRIE)) {
+                    if (!nameIs(product, BACKSTAGE_PASSES)) {
                         if (item.quality > 0) {
-                            if (!item.name.equals(SULFURAS)) {
+                            if (!nameIs(product, SULFURAS)) {
                                 item.quality = item.quality - 1;
                             }
                         }
@@ -57,6 +58,10 @@ class GildedRose {
                 }
             }
         }
+    }
+
+    private boolean nameIs(Product item, ProductType backstagePasses) {
+        return item.is(backstagePasses);
     }
 
     private void increaseQualityFrom(Item item) {

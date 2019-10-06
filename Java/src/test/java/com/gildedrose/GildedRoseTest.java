@@ -4,23 +4,25 @@ import org.junit.Test;
 
 import java.util.stream.IntStream;
 
+import static com.gildedrose.ProductType.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GildedRoseTest {
 
     private static final int MAX_QUALITY = 50;
+    private final String NAME = DEXTERITY_VEST.name;
 
     @Test
     public void the_name_doesnt_change() {
-        Item item = new Item("foo", 0, 0);
+        Item item = new Item(NAME, 0, 0);
         updateQualityFrom(item);
-        assertEquals("the name doesn't change by update", "foo", item.name);
+        assertEquals("the name doesn't change by update", NAME, item.name);
     }
 
     @Test
     public void the_quality_cant_be_negative() {
-        Item item = new Item("foo", 0, 0);
+        Item item = new Item(NAME, 0, 0);
         GildedRose app = createApp(item);
         assertEquals(0, app.items[0].quality);
         app.updateQuality();
@@ -29,7 +31,7 @@ public class GildedRoseTest {
 
     @Test
     public void sellin_days_can_be_negative() {
-        Item item = new Item("foo", 0, 0);
+        Item item = new Item(NAME, 0, 0);
         updateQualityFrom(item);
         assertEquals("sellin days can be negative", -1, item.sellIn);
     }
@@ -126,11 +128,11 @@ public class GildedRoseTest {
 
 
     private Item createItem() {
-        return new Item("tst", 1, 10);
+        return new Item(NAME, 1, 10);
     }
 
     private Item createItemPastSellDate() {
-        return new Item("tst", 0, 10);
+        return new Item(NAME, 0, 10);
     }
 
     private GildedRose createApp(Item item) {
