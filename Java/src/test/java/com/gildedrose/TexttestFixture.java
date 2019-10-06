@@ -1,5 +1,7 @@
 package com.gildedrose;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,8 +14,11 @@ import static org.junit.Assert.assertEquals;
 
 public class TexttestFixture {
     private static List<String> msgs;
+    private final int days = 10;
 
-    public static void main(String[] args) {
+
+    @Test
+    public void goldenMaster(){
         msgs = new ArrayList<>();
         log("OMGHAI!");
 
@@ -30,11 +35,6 @@ public class TexttestFixture {
                 new Item("Conjured Mana Cake", 3, 6)};
 
         GildedRose app = new GildedRose(items);
-
-        int days = 10;
-        if (args.length > 0) {
-            days = Integer.parseInt(args[0]) + 1;
-        }
 
         for (int i = 0; i < days; i++) {
             log("-------- day " + i + " --------");
