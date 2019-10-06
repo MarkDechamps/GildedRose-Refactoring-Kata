@@ -18,11 +18,6 @@ public class GildedRoseTest {
         assertEquals("the name doesn't change by update", "foo", item.name);
     }
 
-    private GildedRose createApp(Item item) {
-        Item[] items = new Item[]{item};
-        return new GildedRose(items);
-    }
-
     @Test
     public void the_quality_cant_be_negative() {
         Item item = new Item("foo", 0, 0);
@@ -88,21 +83,12 @@ public class GildedRoseTest {
 
     @Test
     public void backstage_passes_increase_quality_by_2_between_10_and_5_days(){
-        Item backstage = backstagePass(10);
-        while (backstage.sellIn>5) {
-            int before = backstage.quality;
-            updateQualityFrom(backstage);
-            assertEquals(before + 2, backstage.quality);
-        }
+        testBackstagePasses(10, 5, 2);
     }
+
     @Test
     public void backstage_passes_increase_quality_by_3_between_5_and_0_days(){
-        Item backstage = backstagePass(5);
-        while (backstage.sellIn>0) {
-            int before = backstage.quality;
-            updateQualityFrom(backstage);
-            assertEquals(before + 3, backstage.quality);
-        }
+        testBackstagePasses(5, 0, 3);
     }
     @Test
     public void backstage_passes_quality_drops_to_0_when_sellinday_reaches_0(){
@@ -110,6 +96,15 @@ public class GildedRoseTest {
         assertTrue(backstage.quality>0);
         updateQualityFrom(backstage);
         assertEquals("After sellindays quality drops to 0",backstage.quality,0);
+    }
+
+    private void testBackstagePasses(int fromSellinDays, int toSellinDays, int qualityIncreasesBy) {
+        Item backstage = backstagePass(fromSellinDays);
+        while (backstage.sellIn > toSellinDays) {
+            int before = backstage.quality;
+            updateQualityFrom(backstage);
+            assertEquals(before + qualityIncreasesBy, backstage.quality);
+        }
     }
 
 
@@ -136,5 +131,10 @@ public class GildedRoseTest {
 
     private Item createItemPastSellDate() {
         return new Item("tst", 0, 10);
+    }
+
+    private GildedRose createApp(Item item) {
+        Item[] items = new Item[]{item};
+        return new GildedRose(items);
     }
 }
