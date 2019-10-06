@@ -13,9 +13,7 @@ public class AgedBrie extends Product {
     }
 
     @Override
-    protected void handleOverAge() {
-        if (isOverAge()) {
-            increaseQuality();
-        }
+    protected void doOverAgeAction() {
+        increaseQuality();
     }
 }

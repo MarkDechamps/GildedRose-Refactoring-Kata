@@ -1,6 +1,6 @@
 package com.gildedrose;
 
-import static com.gildedrose.ProductType.*;
+import static com.gildedrose.ProductType.SULFURAS;
 
 public class Product {
     private static final int MAX_QUALITY = 50;
@@ -9,36 +9,36 @@ public class Product {
     private int quality;
     private final ProductType type;
 
-    public Product(int sellIn, int quality, ProductType type) {
+    Product(int sellIn, int quality, ProductType type) {
 
         this.sellIn = sellIn;
         this.quality = quality;
         this.type = type;
     }
 
-    public boolean is(ProductType type) {
+    private boolean is(ProductType type) {
         return this.type.equals(type);
     }
 
-    public boolean qualityCanChange() {
+    private boolean qualityCanChange() {
         return !is(SULFURAS) && quality > 0;
     }
 
-    public void decreaseQuality() {
+    private void decreaseQuality() {
         if (qualityCanChange()) {
             quality = quality - 1;
         }
     }
 
-    public int getQuality() {
+    int getQuality() {
         return quality;
     }
 
-    public void nullifyQuality() {
+    void nullifyQuality() {
         quality = 0;
     }
 
-    public void increaseQuality() {
+    void increaseQuality() {
         if (quality < MAX_QUALITY) {
             quality = quality + 1;
         }
@@ -50,35 +50,43 @@ public class Product {
 
     public void age() {
         sellIn = sellIn - 1;
-        handleOverAge();
-
     }
 
-    protected void handleOverAge() {
+    void doOverAgedQualityUpdates() {
         if (isOverAge()) {
-            if (!is(AGED_BRIE)) {
-                if (!is(BACKSTAGE_PASSES)) {
-                    decreaseQuality();
-                } else {
-                    nullifyQuality();
-                }
-            }
+            doOverAgeAction();
         }
     }
 
-    public boolean isOverAge() {
+    protected void doOverAgeAction() {
+        decreaseQuality();
+    }
+
+    private boolean isOverAge() {
         return sellIn < 0;
     }
 
-    public boolean approachesHoldableLimit() {
+    boolean approachesHoldableLimit() {
         return sellIn < 11;
     }
 
-    public boolean approachesHoldableLimitFast() {
+    boolean approachesHoldableLimitFast() {
         return sellIn < 6;
     }
 
     public int getSellIn() {
         return sellIn;
+    }
+
+    public void doIncreaseQualityUpdates() {
+        increaseQuality();
+    }
+
+    void doQualityUpdates() {
+        if (qualityIncreasesWithAge()) {
+            doIncreaseQualityUpdates();
+        } else {
+            decreaseQuality();
+        }
     }
 }
