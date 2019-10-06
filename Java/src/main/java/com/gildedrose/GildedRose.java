@@ -4,7 +4,6 @@ import static com.gildedrose.ProductType.*;
 
 class GildedRose {
 
-    private static final int MAX_QUALITY = 50;
     Item[] items;
 
     public GildedRose(Item[] items) {
@@ -13,30 +12,24 @@ class GildedRose {
 
     public void updateQuality() {
 
-
         for (Item item : items) {
             Product product = ProductFactory.of(item);
 
             if (!product.is(AGED_BRIE) && !product.is(BACKSTAGE_PASSES)) {
-                if (item.quality > 0) {
-                    if (!product.qualityCanChange()) {
-                        item.quality = item.quality - 1;
-                    }
-                }
+                    product.decreaseQuality();
             } else {
-                if (item.quality < MAX_QUALITY) {
-                    item.quality = item.quality + 1;
+                product.increaseQuality();
 
-                    if (product.is(BACKSTAGE_PASSES)) {
-                        if (item.sellIn < 11) {
-                            increaseQualityFrom(item);
-                        }
+                if (product.is(BACKSTAGE_PASSES)) {
+                    if (item.sellIn < 11) {
+                        product.increaseQuality();
+                    }
 
-                        if (item.sellIn < 6) {
-                            increaseQualityFrom(item);
-                        }
+                    if (item.sellIn < 6) {
+                        product.increaseQuality();
                     }
                 }
+
             }
 
             if (!product.is(SULFURAS)) {
@@ -46,24 +39,19 @@ class GildedRose {
             if (item.sellIn < 0) {
                 if (!product.is(AGED_BRIE)) {
                     if (!product.is(BACKSTAGE_PASSES)) {
-                        if (item.quality > 0) {
-                            if (!product.is(SULFURAS)) {
-                                item.quality = item.quality - 1;
-                            }
-                        }
+                        product.decreaseQuality();
                     } else {
-                        item.quality = 0;
+                        product.nullifyQuality();
                     }
                 } else {
-                    increaseQualityFrom(item);
+                    product.increaseQuality();
                 }
             }
+            /*copy value */
+            item.quality = product.getQuality();
         }
+
+
     }
 
-    private void increaseQualityFrom(Item item) {
-        if (item.quality < MAX_QUALITY) {
-            item.quality = item.quality + 1;
-        }
-    }
 }
