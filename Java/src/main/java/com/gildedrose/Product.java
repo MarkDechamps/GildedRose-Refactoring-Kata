@@ -1,6 +1,6 @@
 package com.gildedrose;
 
-import static com.gildedrose.ProductType.SULFURAS;
+import static com.gildedrose.ProductType.*;
 
 public class Product {
     private static final int MAX_QUALITY = 50;
@@ -9,7 +9,7 @@ public class Product {
     private int quality;
     private final ProductType type;
 
-    public Product( int sellIn, int quality, ProductType type) {
+    public Product(int sellIn, int quality, ProductType type) {
 
         this.sellIn = sellIn;
         this.quality = quality;
@@ -21,7 +21,7 @@ public class Product {
     }
 
     public boolean qualityCanChange() {
-        return !is(SULFURAS) && quality>0;
+        return !is(SULFURAS) && quality > 0;
     }
 
     public void decreaseQuality() {
@@ -35,7 +35,7 @@ public class Product {
     }
 
     public void nullifyQuality() {
-        quality=0;
+        quality = 0;
     }
 
     public void increaseQuality() {
@@ -49,7 +49,21 @@ public class Product {
     }
 
     public void age() {
-            sellIn = sellIn - 1;
+        sellIn = sellIn - 1;
+        handleOverAge();
+
+    }
+
+    protected void handleOverAge() {
+        if (isOverAge()) {
+            if (!is(AGED_BRIE)) {
+                if (!is(BACKSTAGE_PASSES)) {
+                    decreaseQuality();
+                } else {
+                    nullifyQuality();
+                }
+            }
+        }
     }
 
     public boolean isOverAge() {

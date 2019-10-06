@@ -13,7 +13,7 @@ public class ProductFactory {
                 product = new BackStagePasses(item.sellIn, item.quality);
                 break;
             case SULFURAS:
-                product = new Sulfuras(item.sellIn, item.quality);
+                product = new Sulfuras(item.sellIn);
                 break;
             default:
                 product = new Product(item.sellIn, item.quality, type);

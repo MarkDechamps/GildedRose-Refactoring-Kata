@@ -30,21 +30,7 @@ class GildedRose {
                 }
 
             }
-
             product.age();
-
-
-            if (product.isOverAge()) {
-                if (!product.is(AGED_BRIE)) {
-                    if (!product.is(BACKSTAGE_PASSES)) {
-                        product.decreaseQuality();
-                    } else {
-                        product.nullifyQuality();
-                    }
-                } else {
-                    product.increaseQuality();
-                }
-            }
 
             /*copy value */
             item.quality = product.getQuality();

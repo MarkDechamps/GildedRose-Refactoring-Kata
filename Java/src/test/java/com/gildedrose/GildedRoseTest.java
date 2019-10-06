@@ -68,9 +68,20 @@ public class GildedRoseTest {
     @Test
     public void brie_quality_gets_better_by_aging() {
         Item brie = createBrie();
+        brie.sellIn  =0;
+        int before = brie.quality;
+        updateQualityFrom(brie);
+        assertEquals("Overtime brie gets better",2, brie.quality - before);
+    }
+    @Test
+    public void brie_quality_gets_better_by_aging_if_it_is_overage() {
+        Item brie = createBrie();
+        brie.sellIn  =2;
         int before = brie.quality;
         updateQualityFrom(brie);
         assertTrue(brie.quality > before);
+        assertEquals("Normal brie gets slowly better",1, brie.quality - before);
+
     }
 
     @Test
@@ -123,7 +134,7 @@ public class GildedRoseTest {
 
 
     private Item sulfuras() {
-        return new Item("Sulfuras, Hand of Ragnaros",10,10);
+        return new Item("Sulfuras, Hand of Ragnaros",10,80);
     }
 
 
