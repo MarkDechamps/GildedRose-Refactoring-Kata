@@ -5,7 +5,7 @@ import static com.gildedrose.ProductType.SULFURAS;
 public class Product {
     private static final int MAX_QUALITY = 50;
 
-    private final int sellIn;
+    private int sellIn;
     private int quality;
     private final ProductType type;
 
@@ -46,5 +46,25 @@ public class Product {
 
     public boolean qualityIncreasesWithAge() {
         return false;
+    }
+
+    public void age() {
+            sellIn = sellIn - 1;
+    }
+
+    public boolean isOverAge() {
+        return sellIn < 0;
+    }
+
+    public boolean approachesHoldableLimit() {
+        return sellIn < 11;
+    }
+
+    public boolean approachesHoldableLimitFast() {
+        return sellIn < 6;
+    }
+
+    public int getSellIn() {
+        return sellIn;
     }
 }

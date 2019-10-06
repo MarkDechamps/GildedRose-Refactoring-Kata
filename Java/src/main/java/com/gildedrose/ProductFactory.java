@@ -1,22 +1,25 @@
 package com.gildedrose;
 
-import static com.gildedrose.ProductType.AGED_BRIE;
-import static com.gildedrose.ProductType.BACKSTAGE_PASSES;
-
 public class ProductFactory {
 
     public static Product of(Item item) {
         ProductType type = toType(item.name);
-        if(type==AGED_BRIE)
-        {
-            return new AgedBrie(item.sellIn,item.quality);
+        Product product;
+        switch (type) {
+            case AGED_BRIE:
+                product = new AgedBrie(item.sellIn, item.quality);
+                break;
+            case BACKSTAGE_PASSES:
+                product = new BackStagePasses(item.sellIn, item.quality);
+                break;
+            case SULFURAS:
+                product = new Sulfuras(item.sellIn, item.quality);
+                break;
+            default:
+                product = new Product(item.sellIn, item.quality, type);
+                break;
         }
-        if(type==BACKSTAGE_PASSES){
-            return new BackStagePasses(item.sellIn,item.quality);
-
-        }
-
-        return new Product(item.sellIn,item.quality, type);
+        return product;
     }
 
     private static ProductType toType(String name) {

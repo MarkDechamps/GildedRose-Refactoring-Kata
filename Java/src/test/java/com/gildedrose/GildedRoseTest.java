@@ -36,6 +36,13 @@ public class GildedRoseTest {
         assertEquals("sellin days can be negative", -1, item.sellIn);
     }
 
+    @Test
+    public void sellin_days_can_be_negative_keeps_counting() {
+        Item item = new Item(NAME, -1, 0);
+        updateQualityFrom(item);
+        assertEquals("sellin days can be negative", -2, item.sellIn);
+    }
+
     private void updateQualityFrom(Item item) {
         GildedRose app = createApp(item);
         app.updateQuality();

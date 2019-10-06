@@ -16,26 +16,25 @@ class GildedRose {
             Product product = ProductFactory.of(item);
 
             if (!product.qualityIncreasesWithAge()) {
-                    product.decreaseQuality();
+                product.decreaseQuality();
             } else {
                 product.increaseQuality();
                 if (product.is(BACKSTAGE_PASSES)) {
-                    if (item.sellIn < 11) {
+                    if (product.approachesHoldableLimit()) {
                         product.increaseQuality();
                     }
 
-                    if (item.sellIn < 6) {
+                    if (product.approachesHoldableLimitFast()) {
                         product.increaseQuality();
                     }
                 }
 
             }
 
-            if (!product.is(SULFURAS)) {
-                item.sellIn = item.sellIn - 1;
-            }
+            product.age();
 
-            if (item.sellIn < 0) {
+
+            if (product.isOverAge()) {
                 if (!product.is(AGED_BRIE)) {
                     if (!product.is(BACKSTAGE_PASSES)) {
                         product.decreaseQuality();
@@ -46,8 +45,10 @@ class GildedRose {
                     product.increaseQuality();
                 }
             }
+
             /*copy value */
             item.quality = product.getQuality();
+            item.sellIn = product.getSellIn();
         }
 
 
