@@ -16,12 +16,8 @@ public class Product {
         this.type = type;
     }
 
-    private boolean is(ProductType type) {
-        return this.type.equals(type);
-    }
-
-    private boolean qualityCanChange() {
-        return !is(SULFURAS) && quality > 0;
+    boolean qualityCanChange() {
+        return quality > 0;
     }
 
     private void decreaseQuality() {
@@ -48,11 +44,11 @@ public class Product {
         return false;
     }
 
-    public void age() {
+    public void updateSellInDays() {
         sellIn = sellIn - 1;
     }
 
-    void doOverAgedQualityUpdates() {
+    private void doOverAgeQualityUpdates() {
         if (isOverAge()) {
             doOverAgeAction();
         }
@@ -82,11 +78,17 @@ public class Product {
         increaseQuality();
     }
 
-    void doQualityUpdates() {
+    private void doQualityUpdates() {
         if (qualityIncreasesWithAge()) {
             doIncreaseQualityUpdates();
         } else {
             decreaseQuality();
         }
+    }
+
+    void age() {
+        doQualityUpdates();
+        updateSellInDays();
+        doOverAgeQualityUpdates();
     }
 }

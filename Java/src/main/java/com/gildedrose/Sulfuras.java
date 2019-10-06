@@ -8,7 +8,12 @@ public class Sulfuras extends Product {
     }
 
     @Override
-    public void age() {
+    public void updateSellInDays() {
         //Sulfuras doesn't age!
+    }
+
+    @Override
+    boolean qualityCanChange() {
+        return false;
     }
 }

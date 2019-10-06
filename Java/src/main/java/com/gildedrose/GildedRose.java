@@ -9,14 +9,9 @@ class GildedRose {
     }
 
     public void updateQuality() {
-
         for (Item item : items) {
             Product product = ProductFactory.of(item);
-            product.doQualityUpdates();
             product.age();
-            product.doOverAgedQualityUpdates();
-
-            /*copy value */
             item.quality = product.getQuality();
             item.sellIn = product.getSellIn();
         }
