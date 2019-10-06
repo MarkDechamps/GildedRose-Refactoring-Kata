@@ -5,14 +5,12 @@ import static com.gildedrose.ProductType.SULFURAS;
 public class Product {
     private static final int MAX_QUALITY = 50;
 
-    private final String name;
     private final int sellIn;
     private int quality;
     private final ProductType type;
 
-    public Product(String name, int sellIn, int quality, ProductType type) {
+    public Product( int sellIn, int quality, ProductType type) {
 
-        this.name = name;
         this.sellIn = sellIn;
         this.quality = quality;
         this.type = type;
@@ -44,5 +42,9 @@ public class Product {
         if (quality < MAX_QUALITY) {
             quality = quality + 1;
         }
+    }
+
+    public boolean qualityIncreasesWithAge() {
+        return false;
     }
 }

@@ -15,11 +15,10 @@ class GildedRose {
         for (Item item : items) {
             Product product = ProductFactory.of(item);
 
-            if (!product.is(AGED_BRIE) && !product.is(BACKSTAGE_PASSES)) {
+            if (!product.qualityIncreasesWithAge()) {
                     product.decreaseQuality();
             } else {
                 product.increaseQuality();
-
                 if (product.is(BACKSTAGE_PASSES)) {
                     if (item.sellIn < 11) {
                         product.increaseQuality();
