@@ -15,6 +15,9 @@ public class ProductFactory {
             case SULFURAS:
                 product = new Sulfuras(item.sellIn);
                 break;
+            case CONJURED_CAKE:
+                product = new ConjuredCake(item.sellIn,item.quality);
+                break;
             default:
                 product = new Product(item.sellIn, item.quality, type);
                 break;

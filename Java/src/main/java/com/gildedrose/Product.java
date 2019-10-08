@@ -20,7 +20,7 @@ public class Product {
         return quality > 0;
     }
 
-    private void decreaseQuality() {
+    protected void decreaseQuality() {
         if (qualityCanChange()) {
             quality = quality - 1;
         }
